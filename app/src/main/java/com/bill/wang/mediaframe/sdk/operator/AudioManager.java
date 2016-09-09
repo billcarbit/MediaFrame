@@ -50,9 +50,14 @@ public class AudioManager extends MediaFrame {
     public Audio getAudioByCursor(Cursor audioCursor) {
         Audio audio = new Audio();
         if (audioCursor == null) {
-            return audio;
+            return null;
         }
         String path = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+
+        if (!(path != null && new File(path).exists() && AudioUtils.formatFilter(path))) {//音频文件必须实际存在并且格式符合过滤条件
+            return null;
+        }
+
         String title = checkString(audioCursor
                 .getString(audioCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)), audioCursor
                 .getString(audioCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)));
@@ -86,7 +91,9 @@ public class AudioManager extends MediaFrame {
         for (int i = 0; audioCursor != null && i < audioCursor.getCount(); i++) {
             audioCursor.moveToNext();
             Audio audio = getAudioByCursor(audioCursor);
-            audioList.add(audio);
+            if (audio != null) {
+                audioList.add(audio);
+            }
         }
         return audioList;
     }

@@ -33,42 +33,37 @@ public class MainActivity extends Activity {
             String path = audioList.get(i).getPath();
             Log.d(TAG, "path=" + path);
 
-            mediaManager.audioPlayer()
-                    .play(path, new MediaCallback(){
-                @Override
-                public void onBufferingUpdate(MediaPlayer mp, int percent) {
-
-                }
-
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-
-                }
-
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    return false;
-                }
-
-                @Override
-                public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                    return false;
-                }
-
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-
-                }
-
-                @Override
-                public void onSeekComplete(MediaPlayer mp) {
-
-                }
-            });
-
-
 
         }
+
+        String path = audioList.get(0).getPath();
+        Log.d(TAG,"audioList.get(0 ="+path);
+        mediaManager.audioPlayer()
+                .playAsync(path)
+                .doOnBufferingUpdate(new MediaPlayer.OnBufferingUpdateListener() {
+                    @Override
+                    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+
+                    }
+                })
+                .doOnPrepared(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                    }
+                })
+                .doOnError(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        return false;
+                    }
+                });
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
 
     }

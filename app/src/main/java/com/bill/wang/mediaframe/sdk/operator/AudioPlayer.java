@@ -1,7 +1,10 @@
 package com.bill.wang.mediaframe.sdk.operator;
 
 import android.media.MediaPlayer;
+import android.util.Log;
+
 import com.bill.wang.mediaframe.sdk.callback.MediaCallback;
+
 import java.io.IOException;
 
 /**
@@ -10,8 +13,8 @@ import java.io.IOException;
  * <p/>
  * 音频播放者 负责音频的播放，
  */
-public class AudioPlayer extends MediaPlayer{
-
+public class AudioPlayer extends MediaPlayer implements MediaPlayer.OnPreparedListener {
+    public final static String TAG = AudioPlayer.class.getSimpleName();
 
     class AudioPlayerListener implements
             MediaPlayer.OnPreparedListener,
@@ -19,7 +22,7 @@ public class AudioPlayer extends MediaPlayer{
             MediaPlayer.OnBufferingUpdateListener,
             MediaPlayer.OnCompletionListener,
             MediaPlayer.OnInfoListener,
-            MediaPlayer.OnSeekCompleteListener  {
+            MediaPlayer.OnSeekCompleteListener {
         @Override
         public void onBufferingUpdate(MediaPlayer mp, int percent) {
 
@@ -51,27 +54,53 @@ public class AudioPlayer extends MediaPlayer{
         }
     }
 
-    //private Context mContext;
+    public AudioPlayer doOnBufferingUpdate(MediaPlayer.OnBufferingUpdateListener listener) {
+        return this;
+    }
 
-    private MediaCallback mCallback;
+    public AudioPlayer doOnPrepared(MediaPlayer.OnPreparedListener listener) {
+        return this;
+    }
+
+    public AudioPlayer doOnError(MediaPlayer.OnErrorListener listener) {
+        return this;
+    }
+
+    public AudioPlayer doOnCompletion(MediaPlayer.OnCompletionListener listener) {
+        return this;
+    }
+
+    public AudioPlayer doOnInfo(MediaPlayer.OnInfoListener listener) {
+        return this;
+    }
+
+    public AudioPlayer doOnSeekComplete(MediaPlayer.OnSeekCompleteListener listener) {
+        return this;
+    }
+
 
     public AudioPlayer() {
     }
 
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        Log.d(TAG, "onPreparedonPreparedonPrepared");
+        mp.start();
+    }
 
-
-    public void play(String path, MediaCallback callback) {
-        mCallback = callback;
+    public AudioPlayer play(String path) {
         reset();
         setDataSource(path);
         prepare();
         start();
+        return this;
     }
 
-    public void playAsync(String path) {
+    public AudioPlayer playAsync(String path) {
         reset();
         setDataSource(path);
         prepareAsync();
+        return this;
     }
 
     @Override
@@ -105,6 +134,12 @@ public class AudioPlayer extends MediaPlayer{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void prepareAsync() {
+        super.prepareAsync();
     }
 
     @Override

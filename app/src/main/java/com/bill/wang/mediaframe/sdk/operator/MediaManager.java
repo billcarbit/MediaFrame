@@ -1,6 +1,7 @@
 package com.bill.wang.mediaframe.sdk.operator;
 
 import com.bill.wang.mediaframe.sdk.MediaFrame;
+import com.bill.wang.mediaframe.sdk.entity.Audio;
 
 /**
  * Created by bill.wang on 2016/9/9.
@@ -8,6 +9,7 @@ import com.bill.wang.mediaframe.sdk.MediaFrame;
  */
 public class MediaManager extends MediaFrame {
 
+    private AudioPlayer mAudioPlayer;
 
     public MediaManager() {
 
@@ -26,11 +28,21 @@ public class MediaManager extends MediaFrame {
     }
 
     public AudioPlayer audioPlayer() {
-        return new AudioPlayer();
+        if (mAudioPlayer == null) {
+            mAudioPlayer = new AudioPlayer();
+        }
+        return mAudioPlayer;
     }
 
     public MediaDownloader downloader() {
         return new MediaDownloader();
+    }
+
+    public void releaseAudioPlayer() {
+        mAudioPlayer.stop();
+        mAudioPlayer.reset();
+        mAudioPlayer.release();
+        mAudioPlayer = null;
     }
 
 }
