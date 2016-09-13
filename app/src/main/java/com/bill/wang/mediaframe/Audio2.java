@@ -1,10 +1,12 @@
-package com.bill.wang.mediaframe.sdk.entity;
+package com.bill.wang.mediaframe;
+
+import com.bill.wang.mediaframe.sdk.entity.Audio;
 
 /**
  * Created by bill.wang on 2016/9/9.
  * https://github.com/billcarbit/MediaFrame.git
  */
-public class Audio {
+public class Audio2 extends Audio {
     protected String name;
     protected String artist;
     protected String album;

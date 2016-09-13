@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 
 import com.bill.wang.mediaframe.sdk.MediaFrame;
+import com.bill.wang.mediaframe.sdk.callback.OnAllAudioLoaded;
 import com.bill.wang.mediaframe.sdk.entity.Audio;
 import com.bill.wang.mediaframe.sdk.utils.AudioUtils;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.lang.reflect.Method;
 
 /**
  * Created by bill.wang on 2016/9/9.
@@ -40,6 +42,16 @@ public class AudioManager extends MediaFrame {
         }
         return audioList;
     }
+
+    private OnAllAudioLoaded mOnAllAudioLoaded;
+
+    public AudioManager doOnAllAudioLoaded(OnAllAudioLoaded onAllAudioLoaded) {
+        mOnAllAudioLoaded = onAllAudioLoaded;
+        List<Audio> audioList =queryAllAudio();
+        mOnAllAudioLoaded.onLoaded( audioList,MediaManager.getInstance().audioPlayer());
+        return this;
+    }
+
 
     /**
      * 根据游标获取Audio对象

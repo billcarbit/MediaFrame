@@ -13,81 +13,50 @@ import java.io.IOException;
  * <p/>
  * 音频播放者 负责音频的播放，
  */
-public class AudioPlayer extends MediaPlayer implements MediaPlayer.OnPreparedListener {
+public class AudioPlayer extends MediaPlayer {
     public final static String TAG = AudioPlayer.class.getSimpleName();
-
-    class AudioPlayerListener implements
-            MediaPlayer.OnPreparedListener,
-            MediaPlayer.OnErrorListener,
-            MediaPlayer.OnBufferingUpdateListener,
-            MediaPlayer.OnCompletionListener,
-            MediaPlayer.OnInfoListener,
-            MediaPlayer.OnSeekCompleteListener {
-        @Override
-        public void onBufferingUpdate(MediaPlayer mp, int percent) {
-
-        }
-
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-
-        }
-
-        @Override
-        public boolean onError(MediaPlayer mp, int what, int extra) {
-            return false;
-        }
-
-        @Override
-        public boolean onInfo(MediaPlayer mp, int what, int extra) {
-            return false;
-        }
-
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-
-        }
-
-        @Override
-        public void onSeekComplete(MediaPlayer mp) {
-
-        }
-    }
-
-    public AudioPlayer doOnBufferingUpdate(MediaPlayer.OnBufferingUpdateListener listener) {
-        return this;
-    }
-
-    public AudioPlayer doOnPrepared(MediaPlayer.OnPreparedListener listener) {
-        return this;
-    }
-
-    public AudioPlayer doOnError(MediaPlayer.OnErrorListener listener) {
-        return this;
-    }
-
-    public AudioPlayer doOnCompletion(MediaPlayer.OnCompletionListener listener) {
-        return this;
-    }
-
-    public AudioPlayer doOnInfo(MediaPlayer.OnInfoListener listener) {
-        return this;
-    }
-
-    public AudioPlayer doOnSeekComplete(MediaPlayer.OnSeekCompleteListener listener) {
-        return this;
-    }
 
 
     public AudioPlayer() {
     }
 
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        Log.d(TAG, "onPreparedonPreparedonPrepared");
-        mp.start();
+
+    public AudioPlayer doOnBufferingUpdate(MediaPlayer.OnBufferingUpdateListener listener) {
+        this.setOnBufferingUpdateListener(listener);
+        return this;
     }
 
+    public AudioPlayer doOnPrepared(MediaPlayer.OnPreparedListener listener) {
+        this.setOnPreparedListener(listener);
+        return this;
+    }
+
+    public AudioPlayer doOnError(MediaPlayer.OnErrorListener listener) {
+        this.setOnErrorListener(listener);
+        return this;
+    }
+
+    public AudioPlayer doOnCompletion(MediaPlayer.OnCompletionListener listener) {
+        this.setOnCompletionListener(listener);
+        return this;
+    }
+
+    public AudioPlayer doOnInfo(MediaPlayer.OnInfoListener listener) {
+        this.setOnInfoListener(listener);
+        return this;
+    }
+
+    public AudioPlayer doOnSeekComplete(MediaPlayer.OnSeekCompleteListener listener) {
+        this.setOnSeekCompleteListener(listener);
+        return this;
+    }
+
+
+    /**
+     * 同步播放
+     * @param path
+     * @return
+     */
     public AudioPlayer play(String path) {
         reset();
         setDataSource(path);
@@ -96,6 +65,11 @@ public class AudioPlayer extends MediaPlayer implements MediaPlayer.OnPreparedLi
         return this;
     }
 
+    /**
+     * 异步播放
+     * @param path
+     * @return
+     */
     public AudioPlayer playAsync(String path) {
         reset();
         setDataSource(path);

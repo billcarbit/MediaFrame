@@ -10,9 +10,17 @@ import com.bill.wang.mediaframe.sdk.entity.Audio;
 public class MediaManager extends MediaFrame {
 
     private AudioPlayer mAudioPlayer;
+    private static MediaManager mediaManager;
 
-    public MediaManager() {
+    private MediaManager() {
 
+    }
+
+    public static synchronized MediaManager getInstance() {
+        if (mediaManager == null) {
+            mediaManager = new MediaManager();
+        }
+        return mediaManager;
     }
 
     public AudioManager audioMgr() {
