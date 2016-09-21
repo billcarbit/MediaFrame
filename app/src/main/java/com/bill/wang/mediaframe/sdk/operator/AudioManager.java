@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 
 import com.bill.wang.mediaframe.sdk.MediaFrame;
 import com.bill.wang.mediaframe.sdk.callback.OnAllAudioLoaded;
+import com.bill.wang.mediaframe.sdk.callback.Result;
 import com.bill.wang.mediaframe.sdk.entity.Audio;
 import com.bill.wang.mediaframe.sdk.utils.AudioUtils;
 
@@ -25,8 +26,11 @@ import java.lang.reflect.Method;
  */
 public class AudioManager extends MediaFrame {
     private static final String TAG = AudioManager.class.getSimpleName();
+    private AudioPlayer mAudioPlayer;
 
-    public AudioManager() {
+
+    public AudioManager(AudioPlayer audioPlayer) {
+        mAudioPlayer = audioPlayer;
     }
 
     /**
@@ -34,7 +38,7 @@ public class AudioManager extends MediaFrame {
      *
      * @return
      */
-    public List<Audio> queryAllAudio() {
+    private List<Audio> queryAllAudio() {
         Cursor cursor = getAudioCursorByCondition(null, null, null, null);
         List<Audio> audioList = getAudioListByCursor(cursor);
         if (cursor != null && !cursor.isClosed()) {
@@ -43,12 +47,10 @@ public class AudioManager extends MediaFrame {
         return audioList;
     }
 
-    private OnAllAudioLoaded mOnAllAudioLoaded;
 
-    public AudioManager doOnAllAudioLoaded(OnAllAudioLoaded onAllAudioLoaded) {
-        mOnAllAudioLoaded = onAllAudioLoaded;
-        List<Audio> audioList =queryAllAudio();
-        mOnAllAudioLoaded.onLoaded( audioList,MediaManager.getInstance().audioPlayer());
+    public AudioManager doOnAllAudioLoaded(OnAllAudioLoaded result) {
+        List<Audio> audioList = queryAllAudio();
+        result.onLoaded(audioList, mAudioPlayer);
         return this;
     }
 

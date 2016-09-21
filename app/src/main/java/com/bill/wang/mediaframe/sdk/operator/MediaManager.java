@@ -1,6 +1,8 @@
 package com.bill.wang.mediaframe.sdk.operator;
 
 import com.bill.wang.mediaframe.sdk.MediaFrame;
+import com.bill.wang.mediaframe.sdk.callback.OnAllAudioLoaded;
+import com.bill.wang.mediaframe.sdk.callback.Result;
 import com.bill.wang.mediaframe.sdk.entity.Audio;
 
 /**
@@ -9,48 +11,51 @@ import com.bill.wang.mediaframe.sdk.entity.Audio;
  */
 public class MediaManager extends MediaFrame {
 
-    private AudioPlayer mAudioPlayer;
+    private AudioManager mAudioManager;
+    private VideoManager mVideoManager;
     private static MediaManager mediaManager;
 
-    private MediaManager() {
+    public MediaManager() {
 
     }
 
-    public static synchronized MediaManager getInstance() {
+    public AudioManager getAudioManager() {
+        return mAudioManager;
+    }
+
+    public VideoManager getVideoManager() {
+        return mVideoManager;
+    }
+
+/*    public static synchronized MediaManager getInstance() {
         if (mediaManager == null) {
             mediaManager = new MediaManager();
         }
         return mediaManager;
-    }
+    }*/
 
-    public AudioManager audioMgr() {
-        return new AudioManager();
-    }
-
-    public VideoManager videoMgr() {
-        return new VideoManager();
-    }
 
     public DiskScanner diskScanner() {
         return new DiskScanner();
     }
 
-    public AudioPlayer audioPlayer() {
-        if (mAudioPlayer == null) {
-            mAudioPlayer = new AudioPlayer();
+
+    public MediaFrame build(MediaFrame mf) {
+        if (mf instanceof AudioManager) {
+            mAudioManager = (AudioManager) mf;
+        } else if (mf instanceof VideoManager) {
+            mVideoManager = (VideoManager) mf;
         }
-        return mAudioPlayer;
+        return mf;
     }
 
     public MediaDownloader downloader() {
         return new MediaDownloader();
     }
 
-    public void releaseAudioPlayer() {
-        mAudioPlayer.stop();
-        mAudioPlayer.reset();
-        mAudioPlayer.release();
-        mAudioPlayer = null;
-    }
 
+    @Override
+    public AudioManager doOnAllAudioLoaded(OnAllAudioLoaded result) {
+        return null;
+    }
 }
